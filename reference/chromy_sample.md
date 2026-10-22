@@ -83,9 +83,11 @@ An object of class `chromy_sample`: a list with `sample` (a tibble of
 the selected units: `unit` the frame row, `position` in the selection
 list, `expected_hits`, `hits`, `weight` the sampling weight
 `1 / expected_hits`, `fixed_hits`, `random_hits`, then the frame's
-columns), `expected_hits` and `effective_hits` for the whole frame,
-`size`, `n_j`, `order`, `head_position`, and `accounting` (the
-floating-point adjustments the selection made, if any).
+columns — a frame column that clashes with one of these design names is
+kept under the suffix `_frame`, with a warning), `expected_hits` and
+`effective_hits` for the whole frame, `size`, `n_j`, `order`,
+`head_position`, and `accounting` (the floating-point adjustments the
+selection made, if any).
 
 ## Details
 

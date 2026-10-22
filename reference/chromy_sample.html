@@ -147,7 +147,9 @@ random state.</p></dd>
 tibble of the selected units: <code>unit</code> the frame row, <code>position</code> in the
 selection list, <code>expected_hits</code>, <code>hits</code>, <code>weight</code> the sampling weight
 <code>1 / expected_hits</code>, <code>fixed_hits</code>, <code>random_hits</code>, then the frame's
-columns), <code>expected_hits</code> and <code>effective_hits</code> for the whole frame,
+columns — a frame column that clashes with one of these design names
+is kept under the suffix <code>_frame</code>, with a warning),
+<code>expected_hits</code> and <code>effective_hits</code> for the whole frame,
 <code>size</code>, <code>n_j</code>, <code>order</code>, <code>head_position</code>, and <code>accounting</code> (the
 floating-point adjustments the selection made, if any).</p>
     </div>
