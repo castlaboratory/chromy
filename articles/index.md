@@ -11,6 +11,8 @@
   step](https://castlaboratory.github.io/chromy/articles/method.md):
 - [One sample for several
   estimates](https://castlaboratory.github.io/chromy/articles/multivariate.md):
+- [Three variances for one
+  sample](https://castlaboratory.github.io/chromy/articles/variance.md):
 
 ### Validation
 

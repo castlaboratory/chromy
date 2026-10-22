@@ -13,7 +13,7 @@ toolbox — ratios, regressions, domains, calibration — applies."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">chromy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +29,7 @@ toolbox — ratios, regressions, domains, calibration — applies."><meta proper
     <li><h6 class="dropdown-header" data-toc-skip>The method</h6></li>
     <li><a class="dropdown-item" href="../articles/method.html">Chromy's procedure, step by step</a></li>
     <li><a class="dropdown-item" href="../articles/multivariate.html">One sample for several estimates</a></li>
+    <li><a class="dropdown-item" href="../articles/variance.html">Three variances for one sample</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
     <li><a class="dropdown-item" href="../articles/validation.html">Validation</a></li>
@@ -64,7 +65,7 @@ toolbox — ratios, regressions, domains, calibration — applies.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_svydesign</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_svydesign</span><span class="op">(</span><span class="va">x</span>, variance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"replacement"</span>, <span class="st">"pps"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,6 +74,10 @@ toolbox — ratios, regressions, domains, calibration — applies.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A <code><a href="chromy_sample.html">chromy_sample()</a></code>.</p></dd>
+
+
+<dt id="arg-variance">variance<a class="anchor" aria-label="anchor" href="#arg-variance"></a></dt>
+<dd><p><code>"replacement"</code> (the default) or <code>"pps"</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -85,12 +90,14 @@ toolbox — ratios, regressions, domains, calibration — applies.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The variance <code>survey</code> reports under this design (<code>ids = ~1</code>) is the
-with-replacement approximation: it ignores the implicit stratification
-the serpentine order bought, so it tends to be more conservative than
-the successive-difference variance of <code><a href="estimate_total.html">estimate_total()</a></code>, which reads
-that order. Both are defensible reports; they answer slightly different
-questions about the same sample.</p>
+    <p>With <code>variance = "replacement"</code> (the default) the design is <code>ids = ~1</code>:
+the with-replacement approximation, which ignores the implicit
+stratification the serpentine order bought, so it tends to be more
+conservative than the successive-difference variance of
+<code><a href="estimate_total.html">estimate_total()</a></code>. With <code>variance = "pps"</code> the exact joint inclusion
+probabilities of <code><a href="joint_inclusion.html">joint_inclusion()</a></code> are handed to
+<code><a href="https://rdrr.io/pkg/survey/man/HR.html" class="external-link">survey::ppsmat()</a></code> and the Sen–Yates–Grundy variance is exact for
+the design — available for the default without-replacement sample.</p>
     </div>
 
     <div class="section level2">
@@ -107,6 +114,11 @@ questions about the same sample.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   variable  total    se cv_pct random_draws</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> y        <span style="text-decoration: underline;">23</span>879. <span style="text-decoration: underline;">6</span>865.   28.8           18</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">exact</span> <span class="op">&lt;-</span> <span class="fu">as_svydesign</span><span class="op">(</span><span class="va">s</span>, variance <span class="op">=</span> <span class="st">"pps"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">survey</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survey/man/surveysummary.html" class="external-link">svytotal</a></span><span class="op">(</span><span class="op">~</span><span class="va">y</span>, <span class="va">exact</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   total     SE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> y 23879 6712.5</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

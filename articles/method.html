@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">chromy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,6 +41,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>The method</h6></li>
     <li><a class="dropdown-item" href="../articles/method.html">Chromy's procedure, step by step</a></li>
     <li><a class="dropdown-item" href="../articles/multivariate.html">One sample for several estimates</a></li>
+    <li><a class="dropdown-item" href="../articles/variance.html">Three variances for one sample</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
     <li><a class="dropdown-item" href="../articles/validation.html">Validation</a></li>
@@ -267,6 +268,52 @@ the <code>expected_hits</code> on the sample are always the
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $max_adjustment</span></span>
 <span><span class="co">#&gt; [1] 2.58682e-14</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="the-exact-variance">The exact variance<a class="anchor" aria-label="anchor" href="#the-exact-variance"></a>
+</h2>
+<p>Chromy’s procedure down a fixed list is the same design as ordered
+pivotal sampling, and for that design Chauvet and Le Gleut (2021) give
+the joint inclusion probabilities in closed form; with the random head
+the design is the mixture of the circular rotations, each weighted by
+its unit’s probability over the sample size — precisely the head
+<code><a href="../reference/chromy_sample.html">chromy_sample()</a></code> draws. <code><a href="../reference/joint_inclusion.html">joint_inclusion()</a></code>
+evaluates those forms exactly, and with them the Sen–Yates–Grundy
+variance stops being an approximation:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">frame2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">frame2</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">15</span> <span class="op">+</span> <span class="fl">4</span> <span class="op">*</span> <span class="va">frame2</span><span class="op">$</span><span class="va">size</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chromy_sample.html">chromy_sample</a></span><span class="op">(</span><span class="va">frame2</span>, n <span class="op">=</span> <span class="fl">15</span>, size <span class="op">=</span> <span class="st">"size"</span>, seed <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/joint_inclusion.html">joint_inclusion</a></span><span class="op">(</span><span class="va">s2</span><span class="op">)</span></span>
+<span><span class="va">p2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
+<span><span class="co">#&gt;           14        18        23        31</span></span>
+<span><span class="co">#&gt; 14 0.3336117 0.1651951 0.2793048 0.2889759</span></span>
+<span><span class="co">#&gt; 18 0.1651951 0.5176137 0.4314432 0.4483206</span></span>
+<span><span class="co">#&gt; 23 0.2793048 0.4314432 0.8373702 0.7248452</span></span>
+<span><span class="co">#&gt; 31 0.2889759 0.4483206 0.7248452 0.8662061</span></span>
+<span></span>
+<span><span class="co"># Three variance reports for one total, weakest to strongest assumption:</span></span>
+<span><span class="fu">survey</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survey/man/surveysummary.html" class="external-link">svytotal</a></span><span class="op">(</span><span class="op">~</span><span class="va">y</span>, <span class="fu"><a href="../reference/as_svydesign.html">as_svydesign</a></span><span class="op">(</span><span class="va">s2</span><span class="op">)</span><span class="op">)</span>                    <span class="co"># with replacement</span></span>
+<span><span class="co">#&gt;    total     SE</span></span>
+<span><span class="co">#&gt; y 3679.7 290.88</span></span>
+<span><span class="fu"><a href="../reference/estimate_total.html">estimate_total</a></span><span class="op">(</span><span class="va">s2</span>, <span class="st">"y"</span><span class="op">)</span>                                   <span class="co"># successive differences</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span><span class="co">#&gt;   variable total    se cv_pct random_draws</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;        &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 y        3680.  320.   8.69           14</span></span>
+<span><span class="fu">survey</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survey/man/surveysummary.html" class="external-link">svytotal</a></span><span class="op">(</span><span class="op">~</span><span class="va">y</span>, <span class="fu"><a href="../reference/as_svydesign.html">as_svydesign</a></span><span class="op">(</span><span class="va">s2</span>, variance <span class="op">=</span> <span class="st">"pps"</span><span class="op">)</span><span class="op">)</span>  <span class="co"># exact Sen-Yates-Grundy</span></span>
+<span><span class="co">#&gt;    total    SE</span></span>
+<span><span class="co">#&gt; y 3679.7 228.6</span></span></code></pre></div>
+<p>The three point estimates coincide; the variances differ in what they
+know. The exact form is available for the default design (certainties
+resolved, head <code>"all"</code>); a minimum-replacement sample has
+joint moments, not joint inclusion probabilities, and is refused. For
+replicate-based workflows, <code><a href="../reference/as_svrepdesign.html">as_svrepdesign()</a></code> builds the
+successive difference replication of Fay and Train (1995) — the American
+Community Survey convention — whose replicate variance tracks the
+successive-difference estimator while opening the whole of
+<code>survey</code>’s replicate machinery.</p>
 </div>
 <div class="section level2">
 <h2 id="the-estimator">The estimator<a class="anchor" aria-label="anchor" href="#the-estimator"></a>

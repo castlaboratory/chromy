@@ -119,6 +119,58 @@ s$accounting
 #> [1] 2.58682e-14
 ```
 
+## The exact variance
+
+Chromy’s procedure down a fixed list is the same design as ordered
+pivotal sampling, and for that design Chauvet and Le Gleut (2021) give
+the joint inclusion probabilities in closed form; with the random head
+the design is the mixture of the circular rotations, each weighted by
+its unit’s probability over the sample size — precisely the head
+[`chromy_sample()`](https://castlaboratory.github.io/chromy/reference/chromy_sample.md)
+draws.
+[`joint_inclusion()`](https://castlaboratory.github.io/chromy/reference/joint_inclusion.md)
+evaluates those forms exactly, and with them the Sen–Yates–Grundy
+variance stops being an approximation:
+
+``` r
+
+frame2 <- data.frame(size = rlnorm(60, 2))
+frame2$y <- 15 + 4 * frame2$size + rnorm(60, sd = 5)
+s2 <- chromy_sample(frame2, n = 15, size = "size", seed = 4)
+
+p2 <- joint_inclusion(s2)
+p2[1:4, 1:4]
+#>           14        18        23        31
+#> 14 0.3336117 0.1651951 0.2793048 0.2889759
+#> 18 0.1651951 0.5176137 0.4314432 0.4483206
+#> 23 0.2793048 0.4314432 0.8373702 0.7248452
+#> 31 0.2889759 0.4483206 0.7248452 0.8662061
+
+# Three variance reports for one total, weakest to strongest assumption:
+survey::svytotal(~y, as_svydesign(s2))                    # with replacement
+#>    total     SE
+#> y 3679.7 290.88
+estimate_total(s2, "y")                                   # successive differences
+#> # A tibble: 1 × 5
+#>   variable total    se cv_pct random_draws
+#>   <chr>    <dbl> <dbl>  <dbl>        <int>
+#> 1 y        3680.  320.   8.69           14
+survey::svytotal(~y, as_svydesign(s2, variance = "pps"))  # exact Sen-Yates-Grundy
+#>    total    SE
+#> y 3679.7 228.6
+```
+
+The three point estimates coincide; the variances differ in what they
+know. The exact form is available for the default design (certainties
+resolved, head `"all"`); a minimum-replacement sample has joint moments,
+not joint inclusion probabilities, and is refused. For replicate-based
+workflows,
+[`as_svrepdesign()`](https://castlaboratory.github.io/chromy/reference/as_svrepdesign.md)
+builds the successive difference replication of Fay and Train (1995) —
+the American Community Survey convention — whose replicate variance
+tracks the successive-difference estimator while opening the whole of
+`survey`’s replicate machinery.
+
 ## The estimator
 
 With hits $`t_i`$ and effective expected hits $`\lambda_i`$, the

@@ -25,14 +25,14 @@ Source:
 
 Leite A, Ospina R, Ferraz C, dos Santos Bitencourt D, Ribeiro de Santana
 C (2026). *chromy: Chromy's Sequential Sampling with Probability Minimum
-Replacement*. R package version 0.1.0,
+Replacement*. R package version 0.2.0,
 <https://castlaboratory.github.io/chromy/>.
 
     @Manual{,
       title = {chromy: Chromy's Sequential Sampling with Probability Minimum Replacement},
       author = {André Leite and Raydonal Ospina and Cristiano Ferraz and David Eloi {dos Santos Bitencourt} and Clara {Ribeiro de Santana}},
       year = {2026},
-      note = {R package version 0.1.0},
+      note = {R package version 0.2.0},
       url = {https://castlaboratory.github.io/chromy/},
     }
 
@@ -45,7 +45,7 @@ Replacement*. R package version 0.1.0,
 
     Crate (version)            Authors                                   Licence
     -------------------------  ----------------------------------------  ------------------------------------
-    chromy-core (0.1.1)        André Leite, Raydonal Ospina, Cristiano   GPL-3.0-or-later
+    chromy-core (0.2.0)        André Leite, Raydonal Ospina, Cristiano   GPL-3.0-or-later
                                Ferraz, David E. S. Bitencourt, Clara R. de Santana
     extendr-api (0.9.0)        The extendr authors                       MIT
     extendr-ffi (0.9.0)        The extendr authors                       MIT

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">chromy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +23,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>The method</h6></li>
     <li><a class="dropdown-item" href="../articles/method.html">Chromy's procedure, step by step</a></li>
     <li><a class="dropdown-item" href="../articles/multivariate.html">One sample for several estimates</a></li>
+    <li><a class="dropdown-item" href="../articles/variance.html">Three variances for one sample</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
     <li><a class="dropdown-item" href="../articles/validation.html">Validation</a></li>
@@ -49,10 +50,18 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="chromy-020">chromy 0.2.0<a class="anchor" aria-label="anchor" href="#chromy-020"></a></h2>
+<ul><li>Exact second-order inclusion probabilities: <code><a href="../reference/joint_inclusion.html">joint_inclusion()</a></code> evaluates the closed forms of Chauvet and Le Gleut (2021) for the without-replacement design under the random head, and <code>as_svydesign(variance = "pps")</code> hands them to <code><a href="https://rdrr.io/pkg/survey/man/HR.html" class="external-link">survey::ppsmat()</a></code>, making the Sen–Yates–Grundy variance exact.</li>
+<li>Successive difference replication: <code><a href="../reference/as_svrepdesign.html">as_svrepdesign()</a></code> builds the Fay–Train replicate-weights design (the American Community Survey convention), certainty rows unperturbed.</li>
+<li>The selector alone: <code><a href="../reference/pmr.html">pmr()</a></code> for pipelines in the <code>sampling</code> package’s idiom; <code><a href="../reference/as_svydesign.html">as_svydesign()</a></code> and <code><a href="https://rdrr.io/r/stats/weights.html" class="external-link">weights()</a></code> bridge to <code>survey</code>.</li>
+<li>Engine <code>chromy-core</code> 0.2.0, with minimum replacement verified as a runtime invariant on every selection.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="chromy-010">chromy 0.1.0<a class="anchor" aria-label="anchor" href="#chromy-010"></a></h2>
 <ul><li>First release: <code><a href="../reference/chromy_sample.html">chromy_sample()</a></code>, <code><a href="../reference/serpentine_order.html">serpentine_order()</a></code>, <code><a href="../reference/mpps_size.html">mpps_size()</a></code>, <code><a href="../reference/eqcv_allocation.html">eqcv_allocation()</a></code>, <code><a href="../reference/expected_hits.html">expected_hits()</a></code> and <code><a href="../reference/estimate_total.html">estimate_total()</a></code>, on the engine <code>chromy-core</code> 0.1.0.</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

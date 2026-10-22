@@ -11,7 +11,7 @@ regressions, domains, calibration — applies.
 ## Usage
 
 ``` r
-as_svydesign(x, ...)
+as_svydesign(x, variance = c("replacement", "pps"), ...)
 ```
 
 ## Arguments
@@ -20,6 +20,10 @@ as_svydesign(x, ...)
 
   A
   [`chromy_sample()`](https://castlaboratory.github.io/chromy/reference/chromy_sample.md).
+
+- variance:
+
+  `"replacement"` (the default) or `"pps"`.
 
 - ...:
 
@@ -32,13 +36,17 @@ A `survey.design` object.
 
 ## Details
 
-The variance `survey` reports under this design (`ids = ~1`) is the
-with-replacement approximation: it ignores the implicit stratification
-the serpentine order bought, so it tends to be more conservative than
-the successive-difference variance of
-[`estimate_total()`](https://castlaboratory.github.io/chromy/reference/estimate_total.md),
-which reads that order. Both are defensible reports; they answer
-slightly different questions about the same sample.
+With `variance = "replacement"` (the default) the design is `ids = ~1`:
+the with-replacement approximation, which ignores the implicit
+stratification the serpentine order bought, so it tends to be more
+conservative than the successive-difference variance of
+[`estimate_total()`](https://castlaboratory.github.io/chromy/reference/estimate_total.md).
+With `variance = "pps"` the exact joint inclusion probabilities of
+[`joint_inclusion()`](https://castlaboratory.github.io/chromy/reference/joint_inclusion.md)
+are handed to
+[`survey::ppsmat()`](https://rdrr.io/pkg/survey/man/HR.html) and the
+Sen–Yates–Grundy variance is exact for the design — available for the
+default without-replacement sample.
 
 ## Examples
 
@@ -55,4 +63,9 @@ estimate_total(s, "y")
 #>   variable  total    se cv_pct random_draws
 #>   <chr>     <dbl> <dbl>  <dbl>        <int>
 #> 1 y        23879. 6865.   28.8           18
+
+exact <- as_svydesign(s, variance = "pps")
+survey::svytotal(~y, exact)
+#>   total     SE
+#> y 23879 6712.5
 ```

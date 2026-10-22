@@ -27,5 +27,9 @@
   : Estimate totals from a Chromy sample
 - [`as_svydesign()`](https://castlaboratory.github.io/chromy/reference/as_svydesign.md)
   : A chromy sample as a survey design
+- [`as_svrepdesign()`](https://castlaboratory.github.io/chromy/reference/as_svrepdesign.md)
+  : Successive-difference replicate weights for a chromy sample
+- [`joint_inclusion()`](https://castlaboratory.github.io/chromy/reference/joint_inclusion.md)
+  : Exact joint inclusion probabilities of the sampled units
 - [`weights(`*`<chromy_sample>`*`)`](https://castlaboratory.github.io/chromy/reference/weights.chromy_sample.md)
   : Sampling weights of a chromy sample
