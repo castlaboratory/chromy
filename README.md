@@ -70,6 +70,19 @@ design-based analysis. `vignette("chromy")` walks through a full design;
 `vignette("method")` opens the procedure itself; `vignette("validation")`
 checks the promises by simulation.
 
+## How the selection works
+
+The expected hits accumulate down the ordered list; every time the running
+sum crosses an integer, one selection is released, and a single uniform per
+unit decides where it lands:
+
+<img src="man/figures/walk.svg" alt="Six units whose expected hits sum to three; the cumulative path crosses three integer levels, and each crossing releases one selection." width="100%" />
+
+One engine serves three languages — the uniforms arrive as arguments, so
+each language's own generator governs its selections:
+
+<img src="man/figures/architecture.svg" alt="A frame with sizes and the caller's uniforms go into chromy-core, used from Rust, from R as chromy and from Python as pychromy, all pinned to one reference by golden tests." width="100%" />
+
 ## Fidelity
 
 The package was distilled from a reference implementation kept verbatim in
