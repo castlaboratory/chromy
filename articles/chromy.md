@@ -150,6 +150,23 @@ sum(frame$outcome)   # the true total, for comparison
 #> [1] 56475.43
 ```
 
+The frame is always the first argument and the sample the first argument
+of the estimator, so a whole design reads as one pipeline:
+
+``` r
+
+frame |>
+  chromy_sample(
+    n = 40, size = "pupils",
+    order_by = c("region", "district", "chromy_size"), seed = 123
+  ) |>
+  estimate_total("outcome")
+#> # A tibble: 1 × 5
+#>   variable  total    se cv_pct random_draws
+#>   <chr>     <dbl> <dbl>  <dbl>        <int>
+#> 1 outcome  37623. 5010.   13.3           38
+```
+
 The sampling weights are on the sample itself, ready for any other
 design-based analysis:
 
