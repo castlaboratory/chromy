@@ -17,13 +17,24 @@
   hits convergindo ao esperado, e a ordem serpentina.
 
   COMO RODAR
-  1. Ajuste &outdir abaixo para uma pasta sua.
-  2. Submeta o programa inteiro (rodada B: ~2000 PROC SURVEYSELECT, rapido).
-  3. Devolva: sas_single_run.csv, sas_sorted_frame.csv,
+  1. Submeta o programa inteiro (rodada B: ~2000 PROC SURVEYSELECT, rapido).
+     A pasta de saida e detectada sozinha: no SAS Studio / OnDemand (Linux)
+     e a sua home no servidor - os CSVs aparecem no painel
+     "Files (Home)" (clique em refresh); no SAS local de Windows, C:\temp.
+     O log diz a pasta usada; para forcar outra, troque a macro abaixo
+     por um simples %let outdir = /caminho/seu;
+  2. Devolva: sas_single_run.csv, sas_sorted_frame.csv,
      sas_replications.csv e o LOG.
 --------------------------------------------------------------------------*/
 
-%let outdir = C:\temp;        /* <-- AJUSTE para uma pasta sua */
+%macro set_outdir;
+  %global outdir;
+  %if %qupcase(&sysscp) = WIN %then %let outdir = C:\temp;
+  %else %let outdir = %sysfunc(sysget(HOME));
+%mend set_outdir;
+%set_outdir
+%put NOTE: Os CSVs serao gravados em: &outdir;
+
 %let n      = 15;
 %let nseeds = 2000;
 
@@ -140,3 +151,5 @@ proc sql;
     and NumberHits ne ceil(ExpectedHits);
 quit;
 title;
+
+%put NOTE: Pronto. Os tres CSVs estao em &outdir (no SAS Studio: painel "Files (Home)", clique em refresh).;
