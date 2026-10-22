@@ -1,4 +1,5 @@
 #' @keywords internal
+#' @importFrom stats weights
 "_PACKAGE"
 
 #' chromy: Chromy's sequential sampling with probability minimum replacement

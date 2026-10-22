@@ -7,14 +7,17 @@
 #' [estimate_total()]'s point estimates and the whole of `survey`'s
 #' toolbox — ratios, regressions, domains, calibration — applies.
 #'
-#' The variance `survey` reports under this design (`ids = ~1`) is the
-#' with-replacement approximation: it ignores the implicit stratification
-#' the serpentine order bought, so it tends to be more conservative than
-#' the successive-difference variance of [estimate_total()], which reads
-#' that order. Both are defensible reports; they answer slightly different
-#' questions about the same sample.
+#' With `variance = "replacement"` (the default) the design is `ids = ~1`:
+#' the with-replacement approximation, which ignores the implicit
+#' stratification the serpentine order bought, so it tends to be more
+#' conservative than the successive-difference variance of
+#' [estimate_total()]. With `variance = "pps"` the exact joint inclusion
+#' probabilities of [joint_inclusion()] are handed to
+#' [survey::ppsmat()] and the Sen--Yates--Grundy variance is exact for
+#' the design — available for the default without-replacement sample.
 #'
 #' @param x A [chromy_sample()].
+#' @param variance `"replacement"` (the default) or `"pps"`.
 #' @param ... Passed on to [survey::svydesign()].
 #' @return A `survey.design` object.
 #' @export
@@ -25,12 +28,29 @@
 #' d <- as_svydesign(s)
 #' survey::svytotal(~y, d)
 #' estimate_total(s, "y")
-as_svydesign <- function(x, ...) {
+#'
+#' exact <- as_svydesign(s, variance = "pps")
+#' survey::svytotal(~y, exact)
+as_svydesign <- function(x, variance = c("replacement", "pps"), ...) {
   if (!inherits(x, "chromy_sample")) {
     cli::cli_abort("{.arg x} must be a {.cls chromy_sample}.")
   }
+  variance <- rlang::arg_match(variance)
   rlang::check_installed("survey", reason = "to build a survey design.")
-  survey::svydesign(ids = ~1, weights = weights(x), data = x$sample, ...)
+  if (variance == "replacement") {
+    return(survey::svydesign(ids = ~1, weights = weights(x), data = x$sample, ...))
+  }
+  if (any(x$sample$hits != 1L)) {
+    cli::cli_abort(c(
+      "The exact PPS variance needs a without-replacement sample with single hits.",
+      i = "This sample has repeated or fixed multiple hits; use {.code variance = \"replacement\"}."
+    ))
+  }
+  prob <- x$sample$expected_hits
+  survey::svydesign(
+    ids = ~1, fpc = ~prob, data = cbind(x$sample, prob = prob),
+    pps = survey::ppsmat(joint_inclusion(x)), variance = "YG", ...
+  )
 }
 
 #' Sampling weights of a chromy sample

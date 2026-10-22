@@ -1,11 +1,16 @@
 # cran-comments
 
-## Submission of chromy 0.1.0 (new package)
+## Submission of chromy 0.2.0 (new package)
 
 Chromy's (1979) method of sequential random sampling with probability
 minimum replacement — the procedure of PROC SURVEYSELECT METHOD=PPS_SEQ —
 with serpentine sorting, a composite size measure, equal-CV allocation and
 the matching estimator. No implementation of the method exists on CRAN.
+
+Beyond the selection, the package computes the exact second-order
+inclusion probabilities of the design (Chauvet and Le Gleut, 2021) and
+bridges to the survey package (svydesign, including exact PPS variance,
+and successive-difference replicate weights).
 
 The computational engine is the Rust crate chromy-core, written by the
 package authors, vendored in src/rust/vendor.tar.xz with the extendr

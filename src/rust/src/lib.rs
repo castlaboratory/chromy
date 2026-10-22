@@ -4,8 +4,8 @@
 //! arguments, so `set.seed()` governs the selection.
 
 use chromy_core::{
-    eligible_positions, eqcv, expected_hits, mpps, multiplicity_estimate, pmr, select_from,
-    serpentine, nested, EqcvOptions, Head, Key,
+    eligible_positions, eqcv, expected_hits, joint_inclusion, mpps, multiplicity_estimate, pmr,
+    select_from, serpentine, nested, EqcvOptions, Head, Key,
 };
 use extendr_api::prelude::*;
 
@@ -209,11 +209,29 @@ fn estimate_rs(
     ))
 }
 
+/// Exact joint inclusion probabilities of `units` (0-based frame ids)
+/// under the without-replacement design; `order` 0-based. Row-major m x m.
+/// @noRd
+#[extendr]
+fn joint_inclusion_rs(
+    pi: &[f64],
+    order: &[i32],
+    units: &[i32],
+    randomized: bool,
+) -> extendr_api::Result<Vec<f64>> {
+    err(joint_inclusion(
+        pi,
+        &as_usizes(order),
+        &as_usizes(units),
+        randomized,
+    ))
+}
+
 /// The version of the computational engine.
 /// @noRd
 #[extendr]
 fn core_version_rs() -> String {
-    "0.1.1".to_string()
+    "0.2.0".to_string()
 }
 
 extendr_module! {
@@ -226,5 +244,6 @@ extendr_module! {
     fn eligible_rs;
     fn select_from_rs;
     fn estimate_rs;
+    fn joint_inclusion_rs;
     fn core_version_rs;
 }

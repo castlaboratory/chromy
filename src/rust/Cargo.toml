@@ -11,7 +11,7 @@ name = 'chromy'
 
 [dependencies]
 extendr-api = '0.9'
-chromy-core = '0.1.1'
+chromy-core = '0.2.0'
 
 [profile.release]
 lto = true

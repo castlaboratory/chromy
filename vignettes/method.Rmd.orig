@@ -108,6 +108,40 @@ s <- chromy_sample(big, n = 100, size = "size")
 s$accounting
 ```
 
+## The exact variance
+
+Chromy's procedure down a fixed list is the same design as ordered
+pivotal sampling, and for that design Chauvet and Le Gleut (2021) give
+the joint inclusion probabilities in closed form; with the random head
+the design is the mixture of the circular rotations, each weighted by its
+unit's probability over the sample size — precisely the head
+`chromy_sample()` draws. `joint_inclusion()` evaluates those forms
+exactly, and with them the Sen--Yates--Grundy variance stops being an
+approximation:
+
+```{r exact-variance, eval = requireNamespace("survey", quietly = TRUE)}
+frame2 <- data.frame(size = rlnorm(60, 2))
+frame2$y <- 15 + 4 * frame2$size + rnorm(60, sd = 5)
+s2 <- chromy_sample(frame2, n = 15, size = "size", seed = 4)
+
+p2 <- joint_inclusion(s2)
+p2[1:4, 1:4]
+
+# Three variance reports for one total, weakest to strongest assumption:
+survey::svytotal(~y, as_svydesign(s2))                    # with replacement
+estimate_total(s2, "y")                                   # successive differences
+survey::svytotal(~y, as_svydesign(s2, variance = "pps"))  # exact Sen-Yates-Grundy
+```
+
+The three point estimates coincide; the variances differ in what they
+know. The exact form is available for the default design (certainties
+resolved, head `"all"`); a minimum-replacement sample has joint moments,
+not joint inclusion probabilities, and is refused. For replicate-based
+workflows, `as_svrepdesign()` builds the successive difference
+replication of Fay and Train (1995) — the American Community Survey
+convention — whose replicate variance tracks the successive-difference
+estimator while opening the whole of `survey`'s replicate machinery.
+
 ## The estimator
 
 With hits $t_i$ and effective expected hits $\lambda_i$, the multiplicity

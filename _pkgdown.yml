@@ -33,7 +33,7 @@ reference:
 - title: Size and allocation
   contents: [mpps_size, eqcv_allocation]
 - title: Estimating
-  contents: [estimate_total, as_svydesign, weights.chromy_sample]
+  contents: [estimate_total, as_svydesign, as_svrepdesign, joint_inclusion, weights.chromy_sample]
 
 articles:
 - title: Get started

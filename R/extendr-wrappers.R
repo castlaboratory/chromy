@@ -43,6 +43,11 @@ select_from_rs <- function(lambda, order, start, uniforms, head) .Call(wrap__sel
 #' @noRd
 estimate_rs <- function(y, nrow, units, positions, expected, hits) .Call(wrap__estimate_rs, y, nrow, units, positions, expected, hits)
 
+#' Exact joint inclusion probabilities of `units` (0-based frame ids)
+#' under the without-replacement design; `order` 0-based. Row-major m x m.
+#' @noRd
+joint_inclusion_rs <- function(pi, order, units, randomized) .Call(wrap__joint_inclusion_rs, pi, order, units, randomized)
+
 #' The version of the computational engine.
 #' @noRd
 core_version_rs <- function() .Call(wrap__core_version_rs)

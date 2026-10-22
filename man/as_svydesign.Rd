@@ -4,10 +4,12 @@
 \alias{as_svydesign}
 \title{A chromy sample as a survey design}
 \usage{
-as_svydesign(x, ...)
+as_svydesign(x, variance = c("replacement", "pps"), ...)
 }
 \arguments{
 \item{x}{A \code{\link[=chromy_sample]{chromy_sample()}}.}
+
+\item{variance}{\code{"replacement"} (the default) or \code{"pps"}.}
 
 \item{...}{Passed on to \code{\link[survey:svydesign]{survey::svydesign()}}.}
 }
@@ -21,12 +23,14 @@ weighted by \code{hits / expected_hits}, so \code{survey::svytotal()} reproduces
 toolbox — ratios, regressions, domains, calibration — applies.
 }
 \details{
-The variance \code{survey} reports under this design (\code{ids = ~1}) is the
-with-replacement approximation: it ignores the implicit stratification
-the serpentine order bought, so it tends to be more conservative than
-the successive-difference variance of \code{\link[=estimate_total]{estimate_total()}}, which reads
-that order. Both are defensible reports; they answer slightly different
-questions about the same sample.
+With \code{variance = "replacement"} (the default) the design is \code{ids = ~1}:
+the with-replacement approximation, which ignores the implicit
+stratification the serpentine order bought, so it tends to be more
+conservative than the successive-difference variance of
+\code{\link[=estimate_total]{estimate_total()}}. With \code{variance = "pps"} the exact joint inclusion
+probabilities of \code{\link[=joint_inclusion]{joint_inclusion()}} are handed to
+\code{\link[survey:ppsmat]{survey::ppsmat()}} and the Sen--Yates--Grundy variance is exact for
+the design — available for the default without-replacement sample.
 }
 \examples{
 \dontshow{if (requireNamespace("survey", quietly = TRUE)) withAutoprint(\{ # examplesIf}
@@ -36,5 +40,8 @@ s <- chromy_sample(frame, n = 25, size = "size")
 d <- as_svydesign(s)
 survey::svytotal(~y, d)
 estimate_total(s, "y")
+
+exact <- as_svydesign(s, variance = "pps")
+survey::svytotal(~y, exact)
 \dontshow{\}) # examplesIf}
 }
