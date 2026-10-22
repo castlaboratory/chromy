@@ -53,7 +53,9 @@ An object of class \code{chromy_sample}: a list with \code{sample} (a
 tibble of the selected units: \code{unit} the frame row, \code{position} in the
 selection list, \code{expected_hits}, \code{hits}, \code{weight} the sampling weight
 \code{1 / expected_hits}, \code{fixed_hits}, \code{random_hits}, then the frame's
-columns), \code{expected_hits} and \code{effective_hits} for the whole frame,
+columns — a frame column that clashes with one of these design names
+is kept under the suffix \verb{_frame}, with a warning),
+\code{expected_hits} and \code{effective_hits} for the whole frame,
 \code{size}, \code{n_j}, \code{order}, \code{head_position}, and \code{accounting} (the
 floating-point adjustments the selection made, if any).
 }

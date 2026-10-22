@@ -30,3 +30,4 @@
 ^vignettes/.*\.Rmd\.orig$
 ^tools/precompute-vignettes\.R$
 ^tests/testthat/_problems$
+^validation$

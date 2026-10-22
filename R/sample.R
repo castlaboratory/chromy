@@ -46,7 +46,9 @@
 #'   tibble of the selected units: `unit` the frame row, `position` in the
 #'   selection list, `expected_hits`, `hits`, `weight` the sampling weight
 #'   `1 / expected_hits`, `fixed_hits`, `random_hits`, then the frame's
-#'   columns), `expected_hits` and `effective_hits` for the whole frame,
+#'   columns — a frame column that clashes with one of these design names
+#'   is kept under the suffix `_frame`, with a warning),
+#'   `expected_hits` and `effective_hits` for the whole frame,
 #'   `size`, `n_j`, `order`, `head_position`, and `accounting` (the
 #'   floating-point adjustments the selection made, if any).
 #' @references Chromy, J. R. (1979). Sequential sample selection methods.
@@ -147,18 +149,22 @@ chromy_sample <- function(frame, n, size = NULL, variables = NULL,
   drawn <- which(s$hits > 0L)
   units <- s$list[drawn] + 1L
   effective <- s$effective_lambda
-  sample <- tibble::as_tibble(cbind(
-    data.frame(
-      unit = units,
-      position = drawn,
-      expected_hits = effective[units],
-      hits = s$hits[drawn],
-      weight = 1 / effective[units],
-      fixed_hits = floor(effective[units]),
-      random_hits = s$hits[drawn] - floor(effective[units])
-    ),
-    frame[units, , drop = FALSE]
-  ))
+  design <- data.frame(
+    unit = units,
+    position = drawn,
+    expected_hits = effective[units],
+    hits = s$hits[drawn],
+    weight = 1 / effective[units],
+    fixed_hits = floor(effective[units]),
+    random_hits = s$hits[drawn] - floor(effective[units])
+  )
+  carried <- frame[units, , drop = FALSE]
+  clash <- names(carried) %in% names(design)
+  if (any(clash)) {
+    cli::cli_warn("Frame column{?s} {.field {names(carried)[clash]}} renamed with the suffix {.code _frame}: the sample reserves {?that name/those names} for the design.")
+    names(carried)[clash] <- paste0(names(carried)[clash], "_frame")
+  }
+  sample <- tibble::as_tibble(cbind(design, carried))
 
   structure(
     list(

@@ -65,6 +65,16 @@ test_that("input errors are caught with a clear message", {
   )
 })
 
+test_that("a frame column clashing with a design name is kept under _frame", {
+  frame <- data.frame(unit = sprintf("u%02d", 1:30), size = rlnorm(30, 2))
+  expect_warning(
+    s <- chromy_sample(frame, n = 8, size = "size", seed = 3),
+    "_frame"
+  )
+  expect_true(all(c("unit", "unit_frame") %in% names(s$sample)))
+  expect_identical(s$sample$unit_frame, frame$unit[s$sample$unit])
+})
+
 test_that("the printed objects describe themselves", {
   frame <- data.frame(size = rlnorm(30, 2))
   s <- suppressWarnings(chromy_sample(frame, n = 8, size = "size", seed = 2))
