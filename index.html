@@ -114,10 +114,9 @@
 <span>  outcome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Lognormal.html" class="external-link">rlnorm</a></span><span class="op">(</span><span class="fl">300</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">frame</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/chromy_sample.html">chromy_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">40</span>, size <span class="op">=</span> <span class="st">"pupils"</span>,</span>
-<span>                order_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"region"</span>, <span class="st">"chromy_size"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/estimate_total.html">estimate_total</a></span><span class="op">(</span><span class="st">"outcome"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/chromy_sample.html">chromy_sample</a></span><span class="op">(</span><span class="va">frame</span>, n <span class="op">=</span> <span class="fl">40</span>, size <span class="op">=</span> <span class="st">"pupils"</span>,</span>
+<span>                   order_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"region"</span>, <span class="st">"chromy_size"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/estimate_total.html">estimate_total</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"outcome"</span><span class="op">)</span></span></code></pre></div>
 <p>The sample size is exact, every unit’s hits are the floor or the ceiling of its expected hits, and the weights on <code>s$sample</code> are ready for any design-based analysis. <code><a href="articles/chromy.html">vignette("chromy")</a></code> walks through a full design; <code><a href="articles/method.html">vignette("method")</a></code> opens the procedure itself; <code><a href="articles/validation.html">vignette("validation")</a></code> checks the promises by simulation.</p>
 </div>
 <div class="section level2">
