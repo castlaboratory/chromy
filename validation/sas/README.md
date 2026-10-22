@@ -37,6 +37,32 @@ A comparação sorteio-a-sorteio entre SAS e chromy não é possível (cada
 sistema consome o próprio gerador); dentro do chromy ela existe contra o
 protótipo R original (`tests/testthat/test-equivalence.R`).
 
+## Resultado (2026-10-22): 5/5
+
+Com as saídas do SAS 9.4 (M8, Linux x64, SAS Studio) de Cristiano Ferraz:
+
+```
+[ok] ExpectedHits identicos (maior diferenca: 4.99e-11, 60 unidades observadas)
+[ok] soma dos hits = 15 em todas as 2000 sementes
+[ok] hits sempre em {floor, ceil} do esperado (0 violacoes)
+[ok] frequencia observada ~ ExpectedHits (max |z| = 2.23 em 60 unidades)
+[ok] ordem serpentina identica (60/60 posicoes)
+```
+
+Um achado de documentação no caminho: o `METHOD=PPS_SEQ` do SAS é
+**reposição mínima pura** — `ExpectedHits` pode passar de 1 e a unidade
+repetir (as duas unidades grandes deste cadastro chegam a 2 hits); a
+resolução de certezas é opção à parte no SAS (`CERTSIZE=`). O equivalente
+exato no chromy é `min_replacement = TRUE`; o padrão do chromy
+(`min_replacement = FALSE`) resolve certezas iterativamente, como o SAS
+com `CERTSIZE=PROP`. Os `ExpectedHits` do SAS coincidem com
+`expected_hits(size, n, min_replacement = TRUE)` até 5e-11 (precisão de
+exportação do CSV), e a ordenação serpentina do SAS (`SORT=SERP`) coincide
+posição a posição com `serpentine_order()`.
+
+As saídas do Cristiano estão versionadas nesta pasta (`sas_*.csv`,
+`sas_results.pdf`) como evidência reprodutível.
+
 ## Arquivos
 
 | arquivo | origem | conteúdo |

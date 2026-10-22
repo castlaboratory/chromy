@@ -23,7 +23,10 @@ ok <- function(test, label) {
 }
 results <- c()
 
-# 1. ExpectedHits: deterministic, must agree to export precision.
+# 1. ExpectedHits: deterministic, must agree to export precision. SAS's
+# PPS_SEQ is pure minimum replacement (expected hits above one allowed;
+# certainties are a separate SAS option), so the design to match is
+# chromy's min_replacement = TRUE.
 m <- merge(reps[!duplicated(reps$unit), c("unit", "ExpectedHits")],
            reference[c("unit", "expected_hits")], by = "unit")
 delta_lambda <- max(abs(m$ExpectedHits - m$expected_hits))
@@ -43,14 +46,17 @@ results["pmr"] <- ok(viol == 0,
   sprintf("hits sempre em {floor, ceil} do esperado (%d violacoes)", viol))
 
 # 4. Expected hits are delivered: observed frequency vs lambda, in MC SEs.
+# Under minimum replacement hits are floor(lambda) + Bernoulli(frac), so
+# the Monte Carlo variance is frac * (1 - frac).
 n_seeds <- length(unique(reps$seed))
 observed <- tapply(reps$NumberHits, reps$unit, sum) / n_seeds
 observed <- observed[match(reference$unit, names(observed))]
 observed[is.na(observed)] <- 0
 lambda <- reference$expected_hits
-mc_se <- sqrt(pmax(lambda * (1 - pmin(lambda, 1)), 0) / n_seeds)
+frac <- lambda - floor(lambda)
+mc_se <- sqrt(frac * (1 - frac) / n_seeds)
 z <- abs(observed - lambda) / pmax(mc_se, 1e-9)
-z <- z[lambda > 0 & lambda < 1]   # certainties have no MC error
+z <- z[frac > 1e-12]   # integer expected hits have no MC error
 results["freq"] <- ok(max(z) < 4,
   sprintf("frequencia observada ~ ExpectedHits (max |z| = %.2f em %d unidades)",
           max(z), length(z)))
