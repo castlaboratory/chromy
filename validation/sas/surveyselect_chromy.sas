@@ -18,9 +18,10 @@
 
   COMO RODAR
   1. Submeta o programa inteiro (rodada B: ~2000 PROC SURVEYSELECT, rapido).
-     A pasta de saida e detectada sozinha: no SAS Studio / OnDemand (Linux)
-     e a sua home no servidor - os CSVs aparecem no painel
-     "Files (Home)" (clique em refresh); no SAS local de Windows, C:\temp.
+     A pasta de saida e detectada sozinha: em Linux ou Mac e a sua home
+     (no SAS Studio / OnDemand, a home no servidor - os CSVs aparecem no
+     painel "Files (Home)" apos um refresh); no SAS local de Windows,
+     C:\temp.
      O log diz a pasta usada; para forcar outra, troque a macro abaixo
      por um simples %let outdir = /caminho/seu;
   2. Devolva: sas_single_run.csv, sas_sorted_frame.csv,
