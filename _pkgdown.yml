@@ -27,13 +27,13 @@ navbar:
 
 reference:
 - title: Selecting
-  contents: [chromy_sample, expected_hits]
+  contents: [chromy_sample, pmr, expected_hits]
 - title: Ordering the frame
   contents: [serpentine_order]
 - title: Size and allocation
   contents: [mpps_size, eqcv_allocation]
 - title: Estimating
-  contents: [estimate_total]
+  contents: [estimate_total, as_svydesign, weights.chromy_sample]
 
 articles:
 - title: Get started

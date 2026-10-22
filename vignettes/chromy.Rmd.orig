@@ -128,6 +128,31 @@ design-based analysis:
 head(s$sample[c("unit", "expected_hits", "hits", "weight")])
 ```
 
+## Next to its neighbours
+
+The sample carries everything other packages need. `as_svydesign()` hands
+it to the `survey` package — `svytotal()` reproduces the totals above, and
+ratios, domains and calibration follow; the variance there is the
+with-replacement approximation, which ignores the gain the serpentine
+bought, so it tends to be the more conservative report.
+
+```{r survey, eval = requireNamespace("survey", quietly = TRUE)}
+d <- as_svydesign(s)
+survey::svytotal(~outcome, d)
+```
+
+And for pipelines in the idiom of the `sampling` package — a vector of
+inclusion probabilities in, a selection out — `pmr()` is the selector
+alone: the same draw `chromy_sample()` makes, without the frame
+bookkeeping. `expected_hits()` agrees with
+`sampling::inclusionprobabilities()` to machine precision.
+
+```{r pmr}
+pik <- expected_hits(frame$pupils, 40)
+hits <- pmr(pik, order = serpentine_order(frame, "region"), seed = 123)
+sum(hits)
+```
+
 ## Where to next
 
 - `vignette("method")` opens the procedure itself: the running remainder,
