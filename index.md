@@ -76,6 +76,23 @@ opens the procedure itself;
 [`vignette("validation")`](https://castlaboratory.github.io/chromy/articles/validation.md)
 checks the promises by simulation.
 
+## How the selection works
+
+The expected hits accumulate down the ordered list; every time the
+running sum crosses an integer, one selection is released, and a single
+uniform per unit decides where it lands:
+
+![Six units whose expected hits sum to three; the cumulative path
+crosses three integer levels, and each crossing releases one
+selection.](reference/figures/walk.svg)
+
+One engine serves three languages — the uniforms arrive as arguments, so
+each language’s own generator governs its selections:
+
+![A frame with sizes and the caller's uniforms go into chromy-core, used
+from Rust, from R as chromy and from Python as pychromy, all pinned to
+one reference by golden tests.](reference/figures/architecture.svg)
+
 ## Fidelity
 
 The package was distilled from a reference implementation kept verbatim

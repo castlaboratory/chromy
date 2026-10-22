@@ -120,6 +120,14 @@
 <p>The sample size is exact, every unit’s hits are the floor or the ceiling of its expected hits, and the weights on <code>s$sample</code> are ready for any design-based analysis. <code><a href="articles/chromy.html">vignette("chromy")</a></code> walks through a full design; <code><a href="articles/method.html">vignette("method")</a></code> opens the procedure itself; <code><a href="articles/validation.html">vignette("validation")</a></code> checks the promises by simulation.</p>
 </div>
 <div class="section level2">
+<h2 id="how-the-selection-works">How the selection works<a class="anchor" aria-label="anchor" href="#how-the-selection-works"></a>
+</h2>
+<p>The expected hits accumulate down the ordered list; every time the running sum crosses an integer, one selection is released, and a single uniform per unit decides where it lands:</p>
+<p><img src="reference/figures/walk.svg" alt="Six units whose expected hits sum to three; the cumulative path crosses three integer levels, and each crossing releases one selection." width="100%"></p>
+<p>One engine serves three languages — the uniforms arrive as arguments, so each language’s own generator governs its selections:</p>
+<p><img src="reference/figures/architecture.svg" alt="A frame with sizes and the caller's uniforms go into chromy-core, used from Rust, from R as chromy and from Python as pychromy, all pinned to one reference by golden tests." width="100%"></p>
+</div>
+<div class="section level2">
 <h2 id="fidelity">Fidelity<a class="anchor" aria-label="anchor" href="#fidelity"></a>
 </h2>
 <p>The package was distilled from a reference implementation kept verbatim in the test suite as an oracle: given the same seed, <code><a href="reference/chromy_sample.html">chromy_sample()</a></code> reproduces it draw for draw, across every design the two share. The engine is pinned to the same reference by golden fixtures, integer outputs exact and floating-point outputs at machine precision. Floating-point drift in the expected hits is measured, assigned to a single unit, and reported — never silently rescaled.</p>
