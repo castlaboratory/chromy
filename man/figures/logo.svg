@@ -43,7 +43,7 @@
       <circle cx="66"  cy="174" r="8"/>
     </g>
   </g>
-  <text x="120" y="232" text-anchor="middle"
-        font-family="Georgia, 'Times New Roman', serif" font-size="40"
+  <text x="120" y="224" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-size="32"
         font-weight="600" fill="#F2F4FA" letter-spacing="1">chromy</text>
 </svg>
