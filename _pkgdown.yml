@@ -41,7 +41,7 @@ articles:
   contents: [chromy]
 - title: The method
   navbar: The method
-  contents: [method, multivariate]
+  contents: [method, multivariate, variance]
 - title: Validation
   navbar: Validation
   contents: [validation]
