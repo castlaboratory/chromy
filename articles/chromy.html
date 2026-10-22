@@ -244,6 +244,33 @@ design-based analysis:</p>
 <span><span class="co">#&gt; 6    97        0.388      1   2.58</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="next-to-its-neighbours">Next to its neighbours<a class="anchor" aria-label="anchor" href="#next-to-its-neighbours"></a>
+</h2>
+<p>The sample carries everything other packages need.
+<code><a href="../reference/as_svydesign.html">as_svydesign()</a></code> hands it to the <code>survey</code> package
+— <code>svytotal()</code> reproduces the totals above, and ratios,
+domains and calibration follow; the variance there is the
+with-replacement approximation, which ignores the gain the serpentine
+bought, so it tends to be the more conservative report.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_svydesign.html">as_svydesign</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span>
+<span><span class="fu">survey</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survey/man/surveysummary.html" class="external-link">svytotal</a></span><span class="op">(</span><span class="op">~</span><span class="va">outcome</span>, <span class="va">d</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         total   SE</span></span>
+<span><span class="co">#&gt; outcome 37623 5327</span></span></code></pre></div>
+<p>And for pipelines in the idiom of the <code>sampling</code> package —
+a vector of inclusion probabilities in, a selection out —
+<code><a href="../reference/pmr.html">pmr()</a></code> is the selector alone: the same draw
+<code><a href="../reference/chromy_sample.html">chromy_sample()</a></code> makes, without the frame bookkeeping.
+<code><a href="../reference/expected_hits.html">expected_hits()</a></code> agrees with
+<code><a href="https://rdrr.io/pkg/sampling/man/inclusionprobabilities.html" class="external-link">sampling::inclusionprobabilities()</a></code> to machine
+precision.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pik</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/expected_hits.html">expected_hits</a></span><span class="op">(</span><span class="va">frame</span><span class="op">$</span><span class="va">pupils</span>, <span class="fl">40</span><span class="op">)</span></span>
+<span><span class="va">hits</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pmr.html">pmr</a></span><span class="op">(</span><span class="va">pik</span>, order <span class="op">=</span> <span class="fu"><a href="../reference/serpentine_order.html">serpentine_order</a></span><span class="op">(</span><span class="va">frame</span>, <span class="st">"region"</span><span class="op">)</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">hits</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 40</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="where-to-next">Where to next<a class="anchor" aria-label="anchor" href="#where-to-next"></a>
 </h2>
 <ul>

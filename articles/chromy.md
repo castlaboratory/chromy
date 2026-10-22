@@ -184,6 +184,42 @@ head(s$sample[c("unit", "expected_hits", "hits", "weight")])
 #> 6    97        0.388      1   2.58
 ```
 
+## Next to its neighbours
+
+The sample carries everything other packages need.
+[`as_svydesign()`](https://castlaboratory.github.io/chromy/reference/as_svydesign.md)
+hands it to the `survey` package — `svytotal()` reproduces the totals
+above, and ratios, domains and calibration follow; the variance there is
+the with-replacement approximation, which ignores the gain the
+serpentine bought, so it tends to be the more conservative report.
+
+``` r
+
+d <- as_svydesign(s)
+survey::svytotal(~outcome, d)
+#>         total   SE
+#> outcome 37623 5327
+```
+
+And for pipelines in the idiom of the `sampling` package — a vector of
+inclusion probabilities in, a selection out —
+[`pmr()`](https://castlaboratory.github.io/chromy/reference/pmr.md) is
+the selector alone: the same draw
+[`chromy_sample()`](https://castlaboratory.github.io/chromy/reference/chromy_sample.md)
+makes, without the frame bookkeeping.
+[`expected_hits()`](https://castlaboratory.github.io/chromy/reference/expected_hits.md)
+agrees with
+[`sampling::inclusionprobabilities()`](https://rdrr.io/pkg/sampling/man/inclusionprobabilities.html)
+to machine precision.
+
+``` r
+
+pik <- expected_hits(frame$pupils, 40)
+hits <- pmr(pik, order = serpentine_order(frame, "region"), seed = 123)
+sum(hits)
+#> [1] 40
+```
+
 ## Where to next
 
 - [`vignette("method")`](https://castlaboratory.github.io/chromy/articles/method.md)
