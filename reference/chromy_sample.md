@@ -162,4 +162,13 @@ estimate_total(s, c("pupils", "staff"))
 #>   <chr>    <dbl> <dbl>  <dbl>        <int>
 #> 1 pupils   6868. 1130.   16.5           20
 #> 2 staff    1560.  187.   12.0           20
+
+# The frame is the first argument, so a design reads as a pipeline:
+frame |>
+  chromy_sample(n = 20, size = "pupils") |>
+  estimate_total("staff")
+#> # A tibble: 1 × 5
+#>   variable total    se cv_pct random_draws
+#>   <chr>    <dbl> <dbl>  <dbl>        <int>
+#> 1 staff    1309.  573.   43.8           18
 ```

@@ -200,11 +200,20 @@ multivariate, serpentine, nested, residual-head and minimum-replacement
 designs. The Rust engine is itself pinned to the same reference by
 golden fixtures (<code>tests/golden.rs</code> in
 <code>chromy-core</code>), with the integer outputs exact and the
-floating-point outputs at machine precision. A SAS or Stata user can
-check the procedure against
-<code>PROC SURVEYSELECT METHOD=PPS_SEQ</code> or <code>ppschromy</code>
-on their own frames; the designs agree in distribution, though not draw
-for draw, since each system consumes its own generator.</p>
+floating-point outputs at machine precision. That check has been run
+against SAS itself: the <code>validation/sas</code> folder of the
+repository holds a frame of 60 units run through
+<code>PROC SURVEYSELECT METHOD=PPS_SEQ</code> (SAS 9.4, 2000 seeds) and
+through this package. The expected hits agree to export precision (SAS’s
+PPS_SEQ is pure minimum replacement, <code>min_replacement = TRUE</code>
+here; certainty resolution is SAS’s separate <code>CERTSIZE=</code>
+option), the serpentine order agrees position for position, every SAS
+run has the exact sample size within the minimum-replacement bounds, and
+the observed hit frequencies sit within Monte Carlo error of the
+expected hits — five checks of five. A Stata user can run the same
+comparison against <code>ppschromy</code>; the designs agree in
+distribution, though not draw for draw, since each system consumes its
+own generator.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
