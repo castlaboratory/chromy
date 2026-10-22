@@ -1,0 +1,67 @@
+# Authors and Citation
+
+## Authors
+
+- **[André Leite](https://castlab.org)**. Author, maintainer.
+  [](https://orcid.org/0000-0002-4718-9766)
+
+- **[Raydonal Ospina](https://castlab.org)**. Author.
+  [](https://orcid.org/0000-0002-9884-9090)
+
+- **[Cristiano Ferraz](https://castlab.org)**. Author.
+  [](https://orcid.org/0000-0002-6838-6734)
+
+- **David Eloi dos Santos Bitencourt**. Author.
+
+- **Clara Ribeiro de Santana**. Author.
+
+- **The authors of the dependency Rust crates**. Contributor.  
+  see inst/AUTHORS file for details
+
+## Citation
+
+Source:
+[`DESCRIPTION`](https://github.com/castlaboratory/chromy/blob/main/DESCRIPTION)
+
+Leite A, Ospina R, Ferraz C, dos Santos Bitencourt D, Ribeiro de Santana
+C (2026). *chromy: Chromy's Sequential Sampling with Probability Minimum
+Replacement*. R package version 0.1.0,
+<https://castlaboratory.github.io/chromy/>.
+
+    @Manual{,
+      title = {chromy: Chromy's Sequential Sampling with Probability Minimum Replacement},
+      author = {André Leite and Raydonal Ospina and Cristiano Ferraz and David Eloi {dos Santos Bitencourt} and Clara {Ribeiro de Santana}},
+      year = {2026},
+      note = {R package version 0.1.0},
+      url = {https://castlaboratory.github.io/chromy/},
+    }
+
+## Additional details
+
+    The Rust code of chromy is compiled from the crates vendored in
+    src/rust/vendor.tar.xz. Their authors and licences are listed below. The
+    crate chromy-core is written by the authors of this package; the others
+    are the extendr bindings and their dependencies.
+
+    Crate (version)            Authors                                   Licence
+    -------------------------  ----------------------------------------  ------------------------------------
+    chromy-core (0.1.0)        André Leite, Raydonal Ospina, Cristiano   GPL-3.0-or-later
+                               Ferraz, David E. S. Bitencourt, Clara R. de Santana
+    extendr-api (0.9.0)        The extendr authors                       MIT
+    extendr-ffi (0.9.0)        The extendr authors                       MIT
+    extendr-macros (0.9.0)     The extendr authors                       MIT
+    lazy_static (1.5.1)        Marvin Löbel                              MIT OR Apache-2.0
+    once_cell (1.21.4)         Aleksey Kladov                            MIT OR Apache-2.0
+    paste (1.0.15)             David Tolnay                              MIT OR Apache-2.0
+    proc-macro2 (1.0.107)      David Tolnay, Alex Crichton               MIT OR Apache-2.0
+    quote (1.0.47)             David Tolnay                              MIT OR Apache-2.0
+    readonly (0.2.14)          David Tolnay                              MIT OR Apache-2.0
+    syn (2.0.119, 3.0.6)       David Tolnay                              MIT OR Apache-2.0
+    unicode-ident (1.0.26)     David Tolnay                              (MIT OR Apache-2.0) AND Unicode-3.0
+
+    Repositories: https://github.com/castlaboratory/chromy-core,
+    https://github.com/extendr/extendr, https://github.com/rust-lang-nursery/lazy-static.rs,
+    https://github.com/matklad/once_cell, https://github.com/dtolnay/paste,
+    https://github.com/dtolnay/proc-macro2, https://github.com/dtolnay/quote,
+    https://github.com/dtolnay/readonly, https://github.com/dtolnay/syn,
+    https://github.com/dtolnay/unicode-ident.

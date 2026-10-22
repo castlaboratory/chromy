@@ -1,0 +1,25 @@
+# Package index
+
+## Selecting
+
+- [`chromy_sample()`](https://castlaboratory.github.io/chromy/reference/chromy_sample.md)
+  : Select a sample by Chromy's sequential method
+- [`expected_hits()`](https://castlaboratory.github.io/chromy/reference/expected_hits.md)
+  : Expected hits proportional to size
+
+## Ordering the frame
+
+- [`serpentine_order()`](https://castlaboratory.github.io/chromy/reference/serpentine_order.md)
+  : Order a frame for sequential selection
+
+## Size and allocation
+
+- [`mpps_size()`](https://castlaboratory.github.io/chromy/reference/mpps_size.md)
+  : A maximal size measure over several auxiliary variables
+- [`eqcv_allocation()`](https://castlaboratory.github.io/chromy/reference/eqcv_allocation.md)
+  : Allocation that equalises anticipated coefficients of variation
+
+## Estimating
+
+- [`estimate_total()`](https://castlaboratory.github.io/chromy/reference/estimate_total.md)
+  : Estimate totals from a Chromy sample

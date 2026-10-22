@@ -1,0 +1,189 @@
+# Get started with chromy
+
+Chromy’s (1979) method selects units one at a time down an ordered list,
+each with probability proportional to its size, so that every unit’s
+realised number of selections differs from its expected number by less
+than one — *probability minimum replacement* — and the sample size is
+always exact. It is the procedure behind
+`PROC SURVEYSELECT METHOD=PPS_SEQ` and behind many large establishment
+and household surveys; `chromy` is the method in the open. This vignette
+walks through one design from the frame to the estimate.
+
+## A frame
+
+The frame is a data frame with one row per unit. Here, 300 schools in
+four regions, with enrolment as the size and an outcome we will
+estimate.
+
+``` r
+
+library(chromy)
+set.seed(2026)
+
+frame <- data.frame(
+  region   = sample(c("north", "east", "south", "west"), 300, replace = TRUE),
+  district = sample(sprintf("d%02d", 1:20), 300, replace = TRUE),
+  pupils   = round(rlnorm(300, meanlog = 4.5, sdlog = 0.9)),
+  outcome  = rlnorm(300, meanlog = 5, sdlog = 0.7)
+)
+head(frame)
+#>   region district pupils   outcome
+#> 1  north      d02    115 201.00662
+#> 2  north      d13     17 192.24854
+#> 3  north      d12    585  90.31960
+#> 4   east      d07     11  72.72865
+#> 5  north      d13    121  47.06255
+#> 6  south      d15     73 239.34293
+```
+
+## The selection
+
+[`chromy_sample()`](https://castlaboratory.github.io/chromy/reference/chromy_sample.md)
+does the whole procedure: it computes the expected hits from the size,
+orders the frame by the sort keys in hierarchical serpentine order
+(implicit stratification — the computed size is available to the sort as
+`chromy_size`), draws the head of the list with probability proportional
+to size, and selects sequentially down the rotated list.
+
+``` r
+
+s <- chromy_sample(
+  frame,
+  n = 40, size = "pupils",
+  order_by = c("region", "district", "chromy_size"),
+  seed = 123
+)
+s
+#> <chromy_sample> 40 units, 40 hits, from a frame of 300
+#> Head all at list position 218; without replacement.
+#> # A tibble: 40 × 12
+#>     unit position expected_hits  hits weight fixed_hits random_hits region
+#>    <int>    <int>         <dbl> <int>  <dbl>      <dbl>       <dbl> <chr> 
+#>  1    34        2        0.313      1   3.19          0           1 south 
+#>  2    81        8        0.479      1   2.09          0           1 west  
+#>  3   152       17        0.131      1   7.66          0           1 west  
+#>  4   228       29        0.0880     1  11.4           0           1 west  
+#>  5   149       34        0.854      1   1.17          0           1 west  
+#>  6    97       44        0.388      1   2.58          0           1 west  
+#>  7   239       50        0.133      1   7.50          0           1 west  
+#>  8    69       53        0.222      1   4.50          0           1 west  
+#>  9    91       69        0.0340     1  29.4           0           1 west  
+#> 10   157       73        0.0586     1  17.1           0           1 west  
+#> # ℹ 30 more rows
+#> # ℹ 4 more variables: district <chr>, pupils <dbl>, outcome <dbl>,
+#> #   chromy_size <dbl>
+```
+
+Three properties to notice, none of them approximate:
+
+``` r
+
+sum(s$sample$hits)                       # the sample size is exact
+#> [1] 40
+sum(s$expected_hits)                     # the expected hits sum to n
+#> [1] 40
+all(s$sample$hits == floor(s$sample$expected_hits) |
+    s$sample$hits == ceiling(s$sample$expected_hits))
+#> [1] TRUE
+```
+
+The third line is minimum replacement itself: a unit expected 0.3 times
+is selected 0 or 1 times, a unit expected 2.4 times is selected 2 or 3
+times, never further from its expectation. Units whose proportional
+share reaches one are resolved into certainties (`expected_hits = 1`),
+so the ordinary design is without replacement; set
+`min_replacement = TRUE` to let large units keep expected hits above one
+and be selected more than once.
+
+All randomness comes from R’s own generator — one
+[`sample.int()`](https://rdrr.io/r/base/sample.html) for the head, one
+[`runif()`](https://rdrr.io/r/stats/Uniform.html) per unit — so the
+`seed` argument (or a prior
+[`set.seed()`](https://rdrr.io/r/base/Random.html)) reproduces the
+selection exactly.
+
+## The serpentine order
+
+The sort is what makes a sequential selection an implicitly stratified
+one: units that sit together in the list are selected apart. A plain
+nested sort leaves a seam at every boundary where the largest unit of
+one group meets the smallest of the next; the serpentine sort reverses
+direction at each boundary, so neighbouring units are always alike.
+
+``` r
+
+toy <- data.frame(
+  stratum = rep(c("a", "b"), each = 4),
+  size    = c(4, 2, 3, 1, 30, 10, 40, 20)
+)
+toy[serpentine_order(toy, c("stratum", "size")), ]
+#>   stratum size
+#> 4       a    1
+#> 2       a    2
+#> 3       a    3
+#> 1       a    4
+#> 7       b   40
+#> 5       b   30
+#> 8       b   20
+#> 6       b   10
+```
+
+Within stratum `a` the sizes ascend; at the boundary the order turns and
+stratum `b` descends — no seam.
+
+## The estimate
+
+[`estimate_total()`](https://castlaboratory.github.io/chromy/reference/estimate_total.md)
+applies the estimator that matches the design: each unit’s value divided
+by its *effective* expected hits (the ones the selection actually used)
+and weighted by the hits it received, with the successive-difference
+variance read in list order over the randomly decided hits.
+
+``` r
+
+estimate_total(s, "outcome")
+#> # A tibble: 1 × 5
+#>   variable  total    se cv_pct random_draws
+#>   <chr>     <dbl> <dbl>  <dbl>        <int>
+#> 1 outcome  37623. 5010.   13.3           38
+sum(frame$outcome)   # the true total, for comparison
+#> [1] 56475.43
+```
+
+The sampling weights are on the sample itself, ready for any other
+design-based analysis:
+
+``` r
+
+head(s$sample[c("unit", "expected_hits", "hits", "weight")])
+#> # A tibble: 6 × 4
+#>    unit expected_hits  hits weight
+#>   <int>         <dbl> <int>  <dbl>
+#> 1    34        0.313      1   3.19
+#> 2    81        0.479      1   2.09
+#> 3   152        0.131      1   7.66
+#> 4   228        0.0880     1  11.4 
+#> 5   149        0.854      1   1.17
+#> 6    97        0.388      1   2.58
+```
+
+## Where to next
+
+- [`vignette("method")`](https://castlaboratory.github.io/chromy/articles/method.md)
+  opens the procedure itself: the running remainder, the transition
+  probabilities, and the floating-point accounting.
+- [`vignette("multivariate")`](https://castlaboratory.github.io/chromy/articles/multivariate.md)
+  designs one sample that serves several estimates at once, with the
+  maximal size measure and the equal-CV allocation.
+- [`vignette("validation")`](https://castlaboratory.github.io/chromy/articles/validation.md)
+  checks the implementation’s promises by simulation and against the
+  reference implementation.
+
+## References
+
+Chromy, J. R. (1979). Sequential sample selection methods. *Proceedings
+of the American Statistical Association, Survey Research Methods
+Section*, 401–406.
+
+Chauvet, G. and Le Gleut, R. (2021). Properties of Chromy’s sampling
+procedure. *Survey Methodology*, 47(2), 321–347.
