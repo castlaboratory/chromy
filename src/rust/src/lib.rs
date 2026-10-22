@@ -213,7 +213,7 @@ fn estimate_rs(
 /// @noRd
 #[extendr]
 fn core_version_rs() -> String {
-    "0.1.0".to_string()
+    "0.1.1".to_string()
 }
 
 extendr_module! {

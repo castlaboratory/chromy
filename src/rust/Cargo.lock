@@ -12,9 +12,9 @@ dependencies = [
 
 [[package]]
 name = "chromy-core"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "18fa9f22dccf43cabad1ebba75ab6baa0e9dcb9c063169b1a473637699cbccc7"
+checksum = "f514e922e8abac7cc510e13e067371f6e99ff05f835951a83fca784df51d2e52"
 
 [[package]]
 name = "extendr-api"
