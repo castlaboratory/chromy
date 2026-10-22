@@ -93,6 +93,11 @@ s <- chromy_sample(frame,
 )
 s
 estimate_total(s, c("pupils", "staff"))
+
+# The frame is the first argument, so a design reads as a pipeline:
+frame |>
+  chromy_sample(n = 20, size = "pupils") |>
+  estimate_total("staff")
 }
 \references{
 Chromy, J. R. (1979). Sequential sample selection methods.

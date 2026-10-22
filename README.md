@@ -59,9 +59,10 @@ frame <- data.frame(
   outcome = rlnorm(300, 5)
 )
 
-s <- chromy_sample(frame, n = 40, size = "pupils",
-                   order_by = c("region", "chromy_size"))
-estimate_total(s, "outcome")
+frame |>
+  chromy_sample(n = 40, size = "pupils",
+                order_by = c("region", "chromy_size")) |>
+  estimate_total("outcome")
 ```
 
 The sample size is exact, every unit's hits are the floor or the ceiling of

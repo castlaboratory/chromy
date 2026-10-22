@@ -70,6 +70,11 @@
 #' )
 #' s
 #' estimate_total(s, c("pupils", "staff"))
+#'
+#' # The frame is the first argument, so a design reads as a pipeline:
+#' frame |>
+#'   chromy_sample(n = 20, size = "pupils") |>
+#'   estimate_total("staff")
 chromy_sample <- function(frame, n, size = NULL, variables = NULL,
                           n_j = c("eqcv", "equal"), order_by = NULL,
                           method = c("serpentine", "nested"),
