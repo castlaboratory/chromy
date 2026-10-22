@@ -45,7 +45,7 @@ Replacement*. R package version 0.1.0,
 
     Crate (version)            Authors                                   Licence
     -------------------------  ----------------------------------------  ------------------------------------
-    chromy-core (0.1.0)        André Leite, Raydonal Ospina, Cristiano   GPL-3.0-or-later
+    chromy-core (0.1.1)        André Leite, Raydonal Ospina, Cristiano   GPL-3.0-or-later
                                Ferraz, David E. S. Bitencourt, Clara R. de Santana
     extendr-api (0.9.0)        The extendr authors                       MIT
     extendr-ffi (0.9.0)        The extendr authors                       MIT
