@@ -1,6 +1,6 @@
 # A second, independently written implementation of the selection (the
-# cumulative formulation), kept verbatim as a further oracle: same seed,
-# same hits. Source: Chrmy.R.
+# cumulative formulation), written by Clara Ribeiro de Santana and kept
+# verbatim as a further oracle: same seed, same hits.
 # nolint start
 # Chromy com reposição mínima
 

@@ -1,5 +1,6 @@
 # The engine against a second, independently written implementation: the
-# cumulative formulation of chromy_minima (helper-minima.R). Replaying its
+# cumulative formulation of chromy_minima (helper-minima.R, by Clara
+# Ribeiro de Santana). Replaying its
 # exact consumption of R's generator — one uniform for the head by
 # cumulative inversion, then one per unit — the engine must reproduce its
 # hits, seed for seed. Two formulations written by different hands agreeing
