@@ -1,0 +1,18 @@
+[package]
+name = 'chromy'
+publish = false
+version = '0.1.0'
+edition = '2021'
+rust-version = '1.77'
+
+[lib]
+crate-type = [ 'rlib', 'staticlib' ]
+name = 'chromy'
+
+[dependencies]
+extendr-api = '0.9'
+chromy-core = '0.1.0'
+
+[profile.release]
+lto = true
+codegen-units = 1

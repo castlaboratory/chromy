@@ -1,0 +1,58 @@
+Package: chromy
+Title: Chromy's Sequential Sampling with Probability Minimum Replacement
+Version: 0.1.0
+Authors@R: c(
+    person("André", "Leite", , "leite@castlab.org", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-4718-9766")),
+    person("Raydonal", "Ospina", , "raydonal@castlab.org", role = "aut",
+           comment = c(ORCID = "0000-0002-9884-9090")),
+    person("Cristiano", "Ferraz", , "cferraz@castlab.org", role = "aut",
+           comment = c(ORCID = "0000-0002-6838-6734")),
+    person("David Eloi", "dos Santos Bitencourt", , "profdavidsb@gmail.com", role = "aut"),
+    person("Clara", "Ribeiro de Santana", , "clara.rsantana@ufpe.br", role = "aut"),
+    person("The authors of the dependency Rust crates", role = "ctb",
+           comment = "see inst/AUTHORS file for details")
+  )
+Description: Selection of survey samples by Chromy's method of sequential
+    random sampling with probability minimum replacement, the procedure
+    behind 'PROC SURVEYSELECT' 'METHOD=PPS_SEQ': each unit's realised
+    number of selections differs from its expected number by less than
+    one, and the sample size is always exact. With it, the apparatus the
+    method is used with in practice: hierarchical serpentine sorting of
+    the frame for implicit stratification; a maximal size measure over
+    several auxiliary variables; the allocation that equalises
+    anticipated coefficients of variation across variables; expected
+    hits with certainty units resolved by iteration or, under minimum
+    replacement, units selected more than once; and the multiplicity
+    estimator with the successive-difference variance. The computational
+    engine is the Rust crate 'chromy-core'. The methods follow Chromy
+    (1979) and Chauvet and Le Gleut (2021) <doi:10.48550/arXiv.1912.10896>
+    for the selection, and Folsom, Potter and Williams (1987) for the
+    composite size measure.
+License: GPL (>= 3)
+URL: https://castlaboratory.github.io/chromy/,
+    https://github.com/castlaboratory/chromy
+BugReports: https://github.com/castlaboratory/chromy/issues
+Depends:
+    R (>= 4.2)
+Imports:
+    cli,
+    rlang,
+    stats,
+    tibble
+Suggests:
+    dplyr,
+    ggplot2,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder:
+    knitr
+Config/Needs/website: rmarkdown
+Config/rextendr/version: 0.5.0
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en-GB
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0
+SystemRequirements: Cargo (Rust's package manager), rustc >= 1.77.0, xz

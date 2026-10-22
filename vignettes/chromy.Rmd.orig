@@ -1,0 +1,136 @@
+---
+title: "Get started with chromy"
+output:
+  rmarkdown::html_vignette:
+    css: chromy.css
+vignette: >
+  %\VignetteIndexEntry{Get started with chromy}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6.5, fig.height = 4.5, dpi = 96)
+```
+
+Chromy's (1979) method selects units one at a time down an ordered list, each
+with probability proportional to its size, so that every unit's realised
+number of selections differs from its expected number by less than one —
+*probability minimum replacement* — and the sample size is always exact. It
+is the procedure behind `PROC SURVEYSELECT METHOD=PPS_SEQ` and behind many
+large establishment and household surveys; `chromy` is the method in the
+open. This vignette walks through one design from the frame to the estimate.
+
+## A frame
+
+The frame is a data frame with one row per unit. Here, 300 schools in four
+regions, with enrolment as the size and an outcome we will estimate.
+
+```{r setup}
+library(chromy)
+set.seed(2026)
+
+frame <- data.frame(
+  region   = sample(c("north", "east", "south", "west"), 300, replace = TRUE),
+  district = sample(sprintf("d%02d", 1:20), 300, replace = TRUE),
+  pupils   = round(rlnorm(300, meanlog = 4.5, sdlog = 0.9)),
+  outcome  = rlnorm(300, meanlog = 5, sdlog = 0.7)
+)
+head(frame)
+```
+
+## The selection
+
+`chromy_sample()` does the whole procedure: it computes the expected hits
+from the size, orders the frame by the sort keys in hierarchical serpentine
+order (implicit stratification — the computed size is available to the sort
+as `chromy_size`), draws the head of the list with probability proportional
+to size, and selects sequentially down the rotated list.
+
+```{r sample}
+s <- chromy_sample(
+  frame,
+  n = 40, size = "pupils",
+  order_by = c("region", "district", "chromy_size"),
+  seed = 123
+)
+s
+```
+
+Three properties to notice, none of them approximate:
+
+```{r properties}
+sum(s$sample$hits)                       # the sample size is exact
+sum(s$expected_hits)                     # the expected hits sum to n
+all(s$sample$hits == floor(s$sample$expected_hits) |
+    s$sample$hits == ceiling(s$sample$expected_hits))
+```
+
+The third line is minimum replacement itself: a unit expected 0.3 times is
+selected 0 or 1 times, a unit expected 2.4 times is selected 2 or 3 times,
+never further from its expectation. Units whose proportional share reaches
+one are resolved into certainties (`expected_hits = 1`), so the ordinary
+design is without replacement; set `min_replacement = TRUE` to let large
+units keep expected hits above one and be selected more than once.
+
+All randomness comes from R's own generator — one `sample.int()` for the
+head, one `runif()` per unit — so the `seed` argument (or a prior
+`set.seed()`) reproduces the selection exactly.
+
+## The serpentine order
+
+The sort is what makes a sequential selection an implicitly stratified one:
+units that sit together in the list are selected apart. A plain nested sort
+leaves a seam at every boundary where the largest unit of one group meets
+the smallest of the next; the serpentine sort reverses direction at each
+boundary, so neighbouring units are always alike.
+
+```{r serpentine}
+toy <- data.frame(
+  stratum = rep(c("a", "b"), each = 4),
+  size    = c(4, 2, 3, 1, 30, 10, 40, 20)
+)
+toy[serpentine_order(toy, c("stratum", "size")), ]
+```
+
+Within stratum `a` the sizes ascend; at the boundary the order turns and
+stratum `b` descends — no seam.
+
+## The estimate
+
+`estimate_total()` applies the estimator that matches the design: each
+unit's value divided by its *effective* expected hits (the ones the
+selection actually used) and weighted by the hits it received, with the
+successive-difference variance read in list order over the randomly decided
+hits.
+
+```{r estimate}
+estimate_total(s, "outcome")
+sum(frame$outcome)   # the true total, for comparison
+```
+
+The sampling weights are on the sample itself, ready for any other
+design-based analysis:
+
+```{r weights}
+head(s$sample[c("unit", "expected_hits", "hits", "weight")])
+```
+
+## Where to next
+
+- `vignette("method")` opens the procedure itself: the running remainder,
+  the transition probabilities, and the floating-point accounting.
+- `vignette("multivariate")` designs one sample that serves several
+  estimates at once, with the maximal size measure and the equal-CV
+  allocation.
+- `vignette("validation")` checks the implementation's promises by
+  simulation and against the reference implementation.
+
+## References
+
+Chromy, J. R. (1979). Sequential sample selection methods. *Proceedings of
+the American Statistical Association, Survey Research Methods Section*,
+401--406.
+
+Chauvet, G. and Le Gleut, R. (2021). Properties of Chromy's sampling
+procedure. *Survey Methodology*, 47(2), 321--347.

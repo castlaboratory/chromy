@@ -1,0 +1,129 @@
+---
+title: "Chromy's procedure, step by step"
+output:
+  rmarkdown::html_vignette:
+    css: chromy.css
+vignette: >
+  %\VignetteIndexEntry{Chromy's procedure, step by step}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6.5, fig.height = 4.5, dpi = 96)
+```
+
+This vignette opens the machine. Nothing here is needed to *use* the
+package; it is for the reader who wants to know what is being computed, and
+why the answers carry an accounting of floating-point adjustments.
+
+## Expected hits and the running remainder
+
+Write $\lambda_i$ for the expected number of selections (*hits*) of unit
+$i$, in list order, with $\sum_i \lambda_i = n$, the sample size. Split each
+$\lambda_i$ into its integer part $k_i$ and fractional part $r_i$. The
+integer parts are guaranteed: unit $i$ will be selected at least $k_i$
+times. The procedure's whole business is the fractional parts.
+
+Walk the list accumulating the fractional parts: $F_i = F_{i-1} + r_i$,
+wrapping to $F_i - 1$ whenever the sum crosses one. Each crossing releases
+one further selection, to be given either to the unit where the crossing
+happened or to a unit after it. Because every $r_i < 1$, no unit can
+receive more than one of these released selections — which is why each
+unit's hits are $k_i$ or $k_i + 1$ and never further from $\lambda_i$:
+*probability minimum replacement*.
+
+## The transition probabilities
+
+What makes the procedure correct, and not merely clever, is the conditional
+draw at each unit. Let $T_{i-1}$ be the selections made so far and
+$I_{i-1}$ the selections *available* so far (the accumulated integer parts
+plus crossings). At unit $i$ there is at most one selection pending —
+$T_{i-1}$ is either $I_{i-1}$ or $I_{i-1} - 1$ — and Chromy gives the
+probability that unit $i$ settles it, conditional on the state:
+
+| state at $i-1$ | crossing at $i$ | probability unit $i$'s extra hit occurs |
+|---|---|---|
+| nothing pending | no  | $r_i / (1 - F_{i-1})$ |
+| nothing pending | yes | $0$ |
+| one pending     | no  | $1$ |
+| one pending     | yes | $F_i / F_{i-1}$ |
+
+One uniform per unit decides it. These conditionals are built so that,
+unconditionally, each unit's extra hit has probability exactly $r_i$ — the
+procedure is a sequential implementation of the design, not an
+approximation to it. Chauvet and Le Gleut (2021) give the formal
+properties, including the joint inclusion probabilities.
+
+You can watch the state machine directly: the engine reports the hits and
+the accounting of the walk.
+
+```{r walk}
+library(chromy)
+frame <- data.frame(size = c(2.0, 0.6, 1.4, 0.3, 0.7))
+s <- chromy_sample(frame, n = 5, size = "size",
+                   min_replacement = TRUE, seed = 1)
+s$sample[c("unit", "expected_hits", "fixed_hits", "random_hits", "hits")]
+```
+
+Unit 1, expected `r round(5 * 2 / 5, 1)` times, carries its fixed hits; the
+fractional parts are settled one crossing at a time.
+
+## The head of the list
+
+Run from a fixed first unit, the procedure would treat the units near the
+head subtly differently from the units near the tail. Chromy's remedy, kept
+by SAS and by this package, is to draw the head itself with probability
+proportional to size and rotate the list to start there. With
+`head = "residual"`, only units with a fractional expected hit may be drawn
+as the head, and the integer hits are taken as fixed.
+
+## The floating-point accounting
+
+The arithmetic above is exact over the reals and approximate over doubles,
+and a sampling procedure cannot shrug at the difference: a remainder that
+lands at $1 - 10^{-16}$ either is or is not a crossing, and the answer
+changes who can be selected. The engine does three things about it, and
+reports all three rather than hiding them:
+
+1. **The drift is measured.** The expected hits are summed with compensated
+   (Kahan) arithmetic; the difference between the sum and the integer $n$
+   must be below $10^{-8}$, or the selection is refused — silently rescaling
+   the caller's probabilities would detach the weights from the design.
+2. **The drift is assigned.** One unit — the largest fractional part that
+   can absorb it — takes the whole correction, so every other unit's
+   probability is exactly what the caller asked.
+3. **Near-boundary crossings are settled.** A remainder within four units
+   in the last place of 1 is treated as a crossing, the missing sliver
+   borrowed from the units that follow.
+
+The `accounting` element of the sample says what was done; the
+`expected_hits` on the sample are always the *effective* ones — the
+denominators the estimator must use.
+
+```{r accounting}
+set.seed(42)
+big <- data.frame(size = rlnorm(1000, 2))
+s <- chromy_sample(big, n = 100, size = "size")
+s$accounting
+```
+
+## The estimator
+
+With hits $t_i$ and effective expected hits $\lambda_i$, the multiplicity
+(Hansen--Hurwitz form) estimator of a total is
+$\hat{Y} = \sum_{i \in s} t_i\, y_i / \lambda_i$. It is design-unbiased
+under minimum replacement, and reduces to Horvitz--Thompson when no unit
+can be selected twice. For its precision no unbiased variance exists under
+a systematic-like design; `estimate_total()` uses the successive-difference
+estimator over the randomly decided hits, read in list order, where the
+serpentine sort has left genuinely similar neighbours.
+
+## References
+
+Chromy, J. R. (1979). Sequential sample selection methods. *Proceedings of
+the American Statistical Association, Survey Research Methods Section*,
+401--406.
+
+Chauvet, G. and Le Gleut, R. (2021). Properties of Chromy's sampling
+procedure. *Survey Methodology*, 47(2), 321--347.

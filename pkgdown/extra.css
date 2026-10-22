@@ -1,0 +1,33 @@
+/* Tables in articles: let the browser size the columns by content, keep numbers on one line */
+main table, .contents table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  margin: 1.2em 0 1.4em;
+  font-size: 0.9em;
+  line-height: 1.35;
+}
+main table col, .contents table col { width: auto !important; }
+main table th, .contents table th {
+  text-align: left;
+  background: #f3f4f8;
+  border-top: 2px solid #35508C;
+  border-bottom: 1px solid #c9cdd9;
+  padding: 0.45em 0.6em;
+  font-weight: 600;
+  vertical-align: bottom;
+}
+main table td, .contents table td {
+  padding: 0.4em 0.6em;
+  border-bottom: 1px solid #e3e5ec;
+  vertical-align: top;
+}
+main table tr:nth-child(even) td, .contents table tr:nth-child(even) td { background: #fafafc; }
+main table th[align="right"], main table td[align="right"],
+.contents table th[align="right"], .contents table td[align="right"],
+main table th[style*="right"], main table td[style*="right"] {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+main table td:first-child, .contents table td:first-child { font-weight: 500; }

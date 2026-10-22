@@ -1,0 +1,7 @@
+table { width: 100%; table-layout: auto; border-collapse: collapse; margin: 1.2em 0 1.4em; font-size: 0.9em; line-height: 1.35; }
+table col { width: auto !important; }
+table th { text-align: left; background: #f3f4f8; border-top: 2px solid #35508C; border-bottom: 1px solid #c9cdd9; padding: 0.45em 0.6em; font-weight: 600; vertical-align: bottom; }
+table td { padding: 0.4em 0.6em; border-bottom: 1px solid #e3e5ec; vertical-align: top; }
+table tr:nth-child(even) td { background: #fafafc; }
+table th[align="right"], table td[align="right"], table th[style*="right"], table td[style*="right"] { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+table td:first-child { font-weight: 500; }

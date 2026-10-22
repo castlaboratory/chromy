@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="278" viewBox="0 0 240 278" role="img" aria-label="chromy hex logo: a serpentine path threading a frame of units, some selected">
+  <defs>
+    <clipPath id="hex">
+      <polygon points="120,6 234,72 234,206 120,272 6,206 6,72"/>
+    </clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#232E52"/>
+      <stop offset="1" stop-color="#101527"/>
+    </linearGradient>
+  </defs>
+  <polygon points="120,6 234,72 234,206 120,272 6,206 6,72" fill="url(#bg)" stroke="#35508C" stroke-width="7" stroke-linejoin="round"/>
+  <g clip-path="url(#hex)">
+    <!-- the serpentine: the ordered list threading the frame -->
+    <path d="M 48 66
+             L 192 66
+             C 212 66 212 102 192 102
+             L 48 102
+             C 28 102 28 138 48 138
+             L 192 138
+             C 212 138 212 174 192 174
+             L 48 174"
+          fill="none" stroke="#6E86C4" stroke-width="5" stroke-linecap="round" stroke-opacity="0.85"/>
+    <!-- the frame: units along the list, sized as their size measure -->
+    <g fill="#9DB0DC">
+      <circle cx="66"  cy="66"  r="6"/>
+      <circle cx="120" cy="66"  r="9"/>
+      <circle cx="174" cy="66"  r="5"/>
+      <circle cx="174" cy="102" r="8"/>
+      <circle cx="120" cy="102" r="5"/>
+      <circle cx="66"  cy="102" r="7"/>
+      <circle cx="66"  cy="138" r="5"/>
+      <circle cx="120" cy="138" r="10"/>
+      <circle cx="174" cy="138" r="6"/>
+      <circle cx="174" cy="174" r="7"/>
+      <circle cx="120" cy="174" r="5"/>
+      <circle cx="66"  cy="174" r="8"/>
+    </g>
+    <!-- the hits: units the walk selected -->
+    <g fill="#E8A33D" stroke="#F7D9A8" stroke-width="2">
+      <circle cx="120" cy="66"  r="9"/>
+      <circle cx="174" cy="102" r="8"/>
+      <circle cx="120" cy="138" r="10"/>
+      <circle cx="66"  cy="174" r="8"/>
+    </g>
+  </g>
+  <text x="120" y="232" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-size="40"
+        font-weight="600" fill="#F2F4FA" letter-spacing="1">chromy</text>
+</svg>

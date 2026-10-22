@@ -1,0 +1,47 @@
+url: https://castlaboratory.github.io/chromy/
+
+template:
+  bootstrap: 5
+  light-switch: true
+  bslib:
+    primary: "#35508C"
+    base_font: {google: "Source Sans 3"}
+    heading_font: {google: "Source Sans 3"}
+    code_font: {google: "JetBrains Mono"}
+
+development:
+  mode: auto
+
+authors:
+  André Leite:
+    href: https://castlab.org
+  Raydonal Ospina:
+    href: https://castlab.org
+  Cristiano Ferraz:
+    href: https://castlab.org
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, lightswitch, github]
+
+reference:
+- title: Selecting
+  contents: [chromy_sample, expected_hits]
+- title: Ordering the frame
+  contents: [serpentine_order]
+- title: Size and allocation
+  contents: [mpps_size, eqcv_allocation]
+- title: Estimating
+  contents: [estimate_total]
+
+articles:
+- title: Get started
+  navbar: ~
+  contents: [chromy]
+- title: The method
+  navbar: The method
+  contents: [method, multivariate]
+- title: Validation
+  navbar: Validation
+  contents: [validation]
