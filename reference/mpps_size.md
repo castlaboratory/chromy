@@ -45,6 +45,7 @@ Folsom, R. E., Potter, F. J. and Williams, S. R. (1987). Notes on a
 composite size measure for self-weighting samples in multiple domains.
 *Proceedings of the American Statistical Association, Section on Survey
 Research Methods*, 792–796.
+<http://www.asasrms.org/Proceedings/papers/1987_141.pdf>
 
 ## Examples
 

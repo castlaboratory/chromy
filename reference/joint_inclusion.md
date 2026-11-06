@@ -45,6 +45,7 @@ times the square of the sample size.
 
 Chauvet, G. and Le Gleut, R. (2021). Properties of Chromy's sampling
 procedure. *Survey Methodology*, 47(2), 321–347.
+[doi:10.48550/arXiv.1912.10896](https://doi.org/10.48550/arXiv.1912.10896)
 
 ## Examples
 

@@ -112,9 +112,11 @@ makes the selection exactly reproducible.
 Chromy, J. R. (1979). Sequential sample selection methods. *Proceedings
 of the American Statistical Association, Survey Research Methods
 Section*, 401–406.
+<http://www.asasrms.org/Proceedings/papers/1979_081.pdf>
 
 Chauvet, G. and Le Gleut, R. (2021). Properties of Chromy's sampling
 procedure. *Survey Methodology*, 47(2), 321–347.
+[doi:10.48550/arXiv.1912.10896](https://doi.org/10.48550/arXiv.1912.10896)
 
 ## Examples
 

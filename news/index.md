@@ -1,5 +1,11 @@
 # Changelog
 
+## chromy 0.2.1
+
+- CRAN resubmission: the references in the `DESCRIPTION` file now carry
+  links (DOI or URL) and single quotes are confined to software names.
+  No change to the code.
+
 ## chromy 0.2.0
 
 - Exact second-order inclusion probabilities:
