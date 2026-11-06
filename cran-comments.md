@@ -1,6 +1,20 @@
 # cran-comments
 
-## Submission of chromy 0.2.0 (new package)
+## Resubmission of chromy 0.2.1 (new package)
+
+Changes asked for by the CRAN reviewer on the 0.2.0 submission:
+
+- Every reference in the Description now links: Chromy (1979) and
+  Folsom, Potter and Williams (1987) by URL to the ASA proceedings
+  archive (which serves over http only), Chauvet and Le Gleut (2021) by
+  DOI.
+- Single quotes are confined to software names ('SAS', 'Rust',
+  'chromy-core'); the SAS procedure and method names are now unquoted.
+
+The spelling NOTE flags Chromy, Chromy's, Chauvet and Gleut, which are
+surnames.
+
+## About the package
 
 Chromy's (1979) method of sequential random sampling with probability
 minimum replacement — the procedure of PROC SURVEYSELECT METHOD=PPS_SEQ —

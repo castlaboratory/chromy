@@ -103,7 +103,9 @@ frame |>
 Chromy, J. R. (1979). Sequential sample selection methods.
 \emph{Proceedings of the American Statistical Association, Survey Research
 Methods Section}, 401--406.
+\url{http://www.asasrms.org/Proceedings/papers/1979_081.pdf}
 
 Chauvet, G. and Le Gleut, R. (2021). Properties of Chromy's sampling
 procedure. \emph{Survey Methodology}, 47(2), 321--347.
+\doi{10.48550/arXiv.1912.10896}
 }

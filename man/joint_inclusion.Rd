@@ -44,4 +44,5 @@ all(diag(p2) == s$sample$expected_hits)
 \references{
 Chauvet, G. and Le Gleut, R. (2021). Properties of Chromy's
 sampling procedure. \emph{Survey Methodology}, 47(2), 321--347.
+\doi{10.48550/arXiv.1912.10896}
 }

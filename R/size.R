@@ -24,6 +24,7 @@
 #'   Notes on a composite size measure for self-weighting samples in
 #'   multiple domains. *Proceedings of the American Statistical
 #'   Association, Section on Survey Research Methods*, 792--796.
+#'   <http://www.asasrms.org/Proceedings/papers/1987_141.pdf>
 #' @export
 #' @examples
 #' frame <- data.frame(pupils = c(120, 45, 300, 80), staff = c(10, 20, 12, 8))
